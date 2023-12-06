@@ -96,7 +96,45 @@ line charts are easy, and getting this data is simple as well. For each day, add
 ## More Ideas
 1. scatterplot - Freight / total miles
 2. Scatterplot - Revenue / total miles
-3. barChart    - Destination / revenue and or averageRev 
+3. barChart    - Destination / revenue and or averageRev
+4. barChart    - Best customers, Customer / count of orders or miles or revenue
+
+### Best Customers
+
+While I'm thinking about this I only want one api call when I get the values and I want a switch between Number of orders, totalMiles, and total revenue. 
+
+```python
+dict = {
+    orders: [{"customer": cust1, "value": 10}, {"customer": cust2, "value":1}],
+    totalMiles: [{"customer": cust1, "value": 10}, {"customer": cust2, "value":1}],
+    rev: [{"customer": cust1, "value": 10}, {"customer": cust2, "value":1}],
+}
+
+```
+
+then we should be able to access the individual values in javascript
+
+```javascript
+
+
+function App(){
+    const [data, setData] = useState()
+    const [dataValue, setDataValue] = useState("orders")
+    // valid options orders totalMiles rev
+
+    //.... react stuffs ......
+
+    data = data[dataValue]
+
+    dataKey="value"
+    dataKey="customer"
+
+
+}
+
+
+```
+
 
 
 
