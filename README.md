@@ -71,6 +71,36 @@ This is a simple utility file that relies on addToDB.py. Basically it takes in a
 
 Now this is were It gets fun! we can use the data from the database to make graphs and other cool stuff. I'm still working on this part but I have a couple of cool things that I have done. I'm kinda waiting to go back to work inorder to come up with the functions but right now I have a few ways to get all the avaliable weeks. This is were most of the development will likley happen going forward.
 
+### Miles Report
+
+one of the first things that I know would be nice is to see a graph of loaded and empty miles as a double on the same line graph. And also have a tooltip that tells you how many orders there were for that spesific week.
+
+Also I want it to be dynamic, so when too many weeks are selected.. it will switch to monthly bars instead of weekly
+
+### Deleverys to
+
+I want a pie chart where you can select a range and it will give you a pie chart of destinations the trucks went and maybe average revenue per load? 
+
+## additional Graphs!
+
+brainStorming some Ideas for the graphs and valueable data!
+
+### Scatterplot - fuel Surcharge and Revenue
+
+I'm going to need to figure this one out in recharts but a cool trend that I found is that Fuel surcharge and Total revenue are corialted and make a nice line
+
+### line Chart - total Revenu and or average revenu
+
+line charts are easy, and getting this data is simple as well. For each day, add all revenue together and for each day show sum
+
+## More Ideas
+1. scatterplot - Freight / total miles
+2. Scatterplot - Revenue / total miles
+3. barChart    - Destination / revenue and or averageRev 
+
+
+
+
 
 
 

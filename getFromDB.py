@@ -95,6 +95,61 @@ def monthlyMilesReport(startWeek, endWeek):
     for week in range(startWeek, endWeek):
         orders.append(getOrdersByWeek(week))
 
+def getDestinationCountsFromUtahByMonth(month):
+    # returns a list of dictionarys for each destination state
+    #[{'Destination': 'AZ', 'DestinationCount': 1, 'avgRev': 5.0}]
+    query = '''
+        SELECT DestinationState, COUNT(*) as DestinationCount, 
+            ROUND(AVG(RevTotalMile), 2) as AvgMiles
+        FROM Orders
+        WHERE OriginState = 'UT' AND Month = ?
+        GROUP BY DestinationState 
+    '''
+    cursor.execute(query, (month,))
+    dbData = cursor.fetchall()
+
+    myData = []
+
+    for row in dbData:
+        dict = {}
+        dict['Destination'] = row[0]
+        dict['DestinationCount'] = row[1]
+        dict['avgRev'] = row[2]
+        myData.append(dict)
+
+    return myData
+
+def getMonthyRevenue(month):
+    # returns the total revenue for the month
+    query = '''
+        SELECT SUM(TotalRevenue) as TotalRevenue
+        FROM Orders
+        WHERE Month = ?
+    '''
+    cursor.execute(query, (month,))
+    return cursor.fetchone()[0]
+
+def getWeeklyRevenue(week):
+    # returns the total revenue for the week by delivery date
+    query = '''
+        SELECT DeliveryDate, SUM(TotalRevenue) as TotalRevenue
+        FROM Orders
+        WHERE Week = ?
+        GROUP BY DeliveryDate
+    '''
+    cursor.execute(query, (week,))
+    dbData = cursor.fetchall()
+
+    data = []
+    for date in dbData:
+        dict = {}
+        dict['DeliveryDate'] = date[0]
+        dict['TotalRevenue'] = date[1]
+        data.append(dict)
+    return data
+        
+
+
 
     
 
