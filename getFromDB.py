@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime, timedelta
 
 # Connect to SQLite database (creates a new database if it doesn't exist)
 conn = sqlite3.connect("test.db")
@@ -8,6 +9,10 @@ cursor = conn.cursor()
 
 def getOrdersByDateRange(startDate, endDate):
     cursor.execute('SELECT * FROM Orders WHERE DeliveryDate BETWEEN ? AND ?', (startDate, endDate))
+    return cursor.fetchall()
+
+def getOrdersByDate(date):
+    cursor.execute('SELECT * FROM Orders WHERE DeliveryDate = ?', (date,))
     return cursor.fetchall()
 
 def getOrdersByWeek(week):
@@ -36,6 +41,62 @@ def getAvailableMonths():
 def getAvailableQuarters():
     cursor.execute('SELECT DISTINCT Quarter FROM Orders')
     return cursor.fetchall()
+
+def getMilesForWeek(week):
+    query = '''
+        SELECT 
+            SUM(LoadedMiles) as TotalLoadedMiles,
+            SUM(EmptyMiles) as TotalEmptyMiles,
+            SUM(TotalMiles) as TotalTotalMiles,
+            COUNT(*) as TotalOrders
+        FROM Orders
+        WHERE Week = ?
+    '''
+    cursor.execute(query, (week,))
+    columns = [desc[0] for desc in cursor.description]
+    result = cursor.fetchone()
+
+    if result:
+        return dict(zip(columns, result))
+    else:
+        return None
+
+
+def weekToDateRange(str):
+    # weeks is a list of tuples
+    #dBWeeks = getAvailableWeeks()
+
+    year, week_number = map(int, str.split(" W"))
+    # Assuming the week starts on Sunday
+    start_date = datetime.strptime(f"{year}-W{week_number}-0", "%Y-W%W-%w")
+    # Assuming the week ends on Saturday
+    end_date = start_date + timedelta(days=6)
+    return start_date.strftime("%m/%d/%y"), end_date.strftime("%m/%d/%y")
+
+def dateRangeToWeeK(startDate, endDate):
+    # weeks is a list of tuples
+    #dBWeeks = getAvailableWeeks()
+
+    start_date = datetime.strptime(startDate, "%m/%d/%y")
+    end_date = datetime.strptime(endDate, "%m/%d/%y")
+    # Assuming the week starts on Sunday
+    week_number = start_date.strftime("%W")
+    year = start_date.strftime("%Y")
+    return f"{year} W{week_number}"
+
+def monthlyMilesReport(startWeek, endWeek):
+    # month is a string in the format of "2023 W40" and "2023 W50"
+
+    #returns loaded miles, empty miles, total miles, and total orders for each week 
+    #in the range of startWeek to endWeek
+
+    #get orders for each week in the range
+    orders = []
+    for week in range(startWeek, endWeek):
+        orders.append(getOrdersByWeek(week))
+
+
+    
 
 
 
